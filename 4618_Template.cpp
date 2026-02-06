@@ -7,8 +7,7 @@
 ////////////////////////////////////////////////////////////////
 #include "stdafx.h"
 
-//check in 
-// Add simple GUI elements
+
 #define CVUI_DISABLE_COMPILATION_NOTICES
 #define CVUI_IMPLEMENTATION
 #include "cvui.h"
@@ -18,10 +17,16 @@
 #include <fstream>
 #include <sstream>
 #include <thread>
+#include <ctype.h> //for toupper() in lab 2
+#include "CStudent.h" //Classes for lab 2
+#include "CCourse.h"   
+#include "Lab3.h"
 
+#include "CControl.h"
+/*
 #include "Client.h"
 #include "Server.h"
-
+*/
 // Must include Windows.h after Winsock2.h, so Serial must be included after Client/Server
 #include "Serial.h" 
 
@@ -142,6 +147,62 @@ void do_image()
   }
 }
 
+///////////////////////////////////////////////////////////////
+// FUNCTIONS FOR LAB 2
+//////////////////////////////////////////////////////////////
+
+void lab2_print_menu(void)
+{
+    std::cout << '\n';
+    std::cout << std::string(40, '*') << '\n';
+    std::cout << "ELEX4618 Grade System, by Jack Gillis" << '\n';
+    std::cout << std::string(40, '*') << '\n';
+    std::cout << "(A)dd student" << '\n';
+    std::cout << "(E)dit student" << '\n';
+    std::cout << "(D)elete student" << '\n';
+    std::cout << "(P)rint student" << '\n';
+    std::cout << "(S)ave class" << '\n';
+    std::cout << "(L)oad class" << '\n';
+    std::cout << "(Q)uit" << '\n';
+}
+
+char lab2_input_checker(char input)
+{
+    bool input_check = false;
+    do
+    {
+        input = std::toupper(input);
+        switch(input)
+        {
+        case 'A':
+        case 'E':
+        case 'D':
+        case 'P':
+        case 'S':
+        case 'L':
+        case 'Q':
+        {
+            input_check = true;
+            break;
+        }
+        case 'M':
+            lab2_print_menu();
+        default:
+        {
+            std::cout << "\nPlease enter a valid input or enter (M)enu: ";
+            std::cin >> input;
+        }
+        }//end switch
+    } while (!input_check);
+    return input;
+}//end lab2_input_checker()
+
+
+
+//void _edit_student();
+//void _print_class_list();
+
+
 ////////////////////////////////////////////////////////////////
 // Display Video on screen
 ////////////////////////////////////////////////////////////////
@@ -236,7 +297,7 @@ void do_video()
     while (cv::waitKey(1) != 'q' && do_exit == false);
   }      
 }		
-
+/*
 ////////////////////////////////////////////////////////////////
 // Demo client server communication
 ////////////////////////////////////////////////////////////////
@@ -305,12 +366,13 @@ void do_clientserver()
   
   Sleep(100);
 }
-
+*/ 
 ////////////////////////////////////////////////////////////////
 // Lab 1
 ////////////////////////////////////////////////////////////////
 void lab1()
 {
+    
 }
 
 ////////////////////////////////////////////////////////////////
@@ -318,6 +380,75 @@ void lab1()
 ////////////////////////////////////////////////////////////////
 void lab2()
 {
+    char lab2_cmd;
+    int target_student;
+    CCourse course;
+    do
+    {
+        lab2_print_menu();
+        std::cin >> lab2_cmd;
+        lab2_cmd = lab2_input_checker(lab2_cmd);//also capitalizes the input
+
+        switch (lab2_cmd)
+        {
+        case 'A':
+        {
+            course._add_student();
+            break;
+        }
+        case 'E':
+        {
+            if (course._get_student_count() == 0)
+            {
+                std::cout << "\nNo students to edit.\n";
+                break;
+            }
+
+            int target_stud = -1;
+            std::cout << "\nStudent to edit: ";
+
+            if (!(std::cin >> target_stud))
+            {
+                std::cout << "\nPlease enter a number.\n";
+                break;
+            }
+
+            if (target_stud < 1 || target_stud > course._get_student_count())
+            {
+                std::cout << "\nInvalid student number\n";
+                break;
+            }
+
+            course._edit_student(target_stud - 1);
+            
+            //course._edit_student();
+            break;
+        }
+
+        case 'P':
+        {
+            course._print_class_list();
+            break;
+        }
+        case 'S':
+        {
+            course._save_file();
+            break;
+        }
+        case 'L':
+        {
+            course._load_file();
+            break;
+        }
+        case 'D':
+        {
+            course._delete_student();
+            break;
+        }
+        }
+        //std::cout << "Good job, you entered: " << lab2_cmd <<'\n';
+        
+    } while (lab2_cmd != 'Q');
 }
 
 ////////////////////////////////////////////////////////////////
@@ -325,6 +456,7 @@ void lab2()
 ////////////////////////////////////////////////////////////////
 void lab3()
 {
+    lab3_loop();
 }
 
 ////////////////////////////////////////////////////////////////
@@ -390,7 +522,9 @@ int main(int argc, char* argv[])
     case 10: test_com(); break;
 		case 11: do_image(); break;
 		case 12: do_video(); break;
-    case 13: do_clientserver(); break;
+    //case 13: do_clientserver(); break;
 		}
 	} while (cmd != 0);
 }
+
+

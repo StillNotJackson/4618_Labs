@@ -1,0 +1,12 @@
+{
+    "students": [
+        {
+            "grade_endterm": 55.0,
+            "grade_final": 37.400001525878906,
+            "grade_lab": 22.0,
+            "grade_midterm": 44.0,
+            "grade_quiz": 33.0,
+            "student_number": "A01255045"
+        }
+    ]
+}

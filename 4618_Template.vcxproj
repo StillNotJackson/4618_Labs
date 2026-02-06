@@ -89,13 +89,26 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClInclude Include="CBase4618.h" />
+    <ClInclude Include="CControl.h" />
+    <ClInclude Include="CCourse.h" />
+    <ClInclude Include="CSketch.h" />
+    <ClInclude Include="CStudent.h" />
     <ClInclude Include="cvui.h" />
+    <ClInclude Include="json.hpp" />
+    <ClInclude Include="Lab3.h" />
     <ClInclude Include="Serial.h" />
     <ClInclude Include="server.h" />
     <ClInclude Include="stdafx.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="4618_Template.cpp" />
+    <ClCompile Include="CBase4618.cpp" />
+    <ClCompile Include="CControl.cpp" />
+    <ClCompile Include="CCourse.cpp" />
+    <ClCompile Include="CSketch.cpp" />
+    <ClCompile Include="CStudent.cpp" />
+    <ClCompile Include="Lab3.cpp" />
     <ClCompile Include="Serial.cpp" />
     <ClCompile Include="server.cpp" />
     <ClCompile Include="stdafx.cpp">

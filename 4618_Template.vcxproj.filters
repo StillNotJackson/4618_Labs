@@ -1,0 +1,63 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <ClCompile Include="4618_Template.cpp" />
+    <ClCompile Include="Serial.cpp" />
+    <ClCompile Include="server.cpp" />
+    <ClCompile Include="stdafx.cpp" />
+    <ClCompile Include="CCourse.cpp">
+      <Filter>Lab 2</Filter>
+    </ClCompile>
+    <ClCompile Include="CStudent.cpp">
+      <Filter>Lab 2</Filter>
+    </ClCompile>
+    <ClCompile Include="CControl.cpp">
+      <Filter>Lab 3</Filter>
+    </ClCompile>
+    <ClCompile Include="Lab3.cpp">
+      <Filter>Lab 3</Filter>
+    </ClCompile>
+    <ClCompile Include="CBase4618.cpp">
+      <Filter>Lab 4</Filter>
+    </ClCompile>
+    <ClCompile Include="CSketch.cpp">
+      <Filter>Lab 4</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="cvui.h" />
+    <ClInclude Include="Serial.h" />
+    <ClInclude Include="server.h" />
+    <ClInclude Include="stdafx.h" />
+    <ClInclude Include="json.hpp" />
+    <ClInclude Include="CCourse.h">
+      <Filter>Lab 2</Filter>
+    </ClInclude>
+    <ClInclude Include="CStudent.h">
+      <Filter>Lab 2</Filter>
+    </ClInclude>
+    <ClInclude Include="CControl.h">
+      <Filter>Lab 3</Filter>
+    </ClInclude>
+    <ClInclude Include="Lab3.h">
+      <Filter>Lab 3</Filter>
+    </ClInclude>
+    <ClInclude Include="CBase4618.h">
+      <Filter>Lab 4</Filter>
+    </ClInclude>
+    <ClInclude Include="CSketch.h">
+      <Filter>Lab 4</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <Filter Include="Lab 2">
+      <UniqueIdentifier>{281aeb78-92a1-4d54-9bf0-b87c108fb75f}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Lab 3">
+      <UniqueIdentifier>{88249caf-6cfd-469f-96ff-4fbfbbbda66c}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Lab 4">
+      <UniqueIdentifier>{b783e8cc-43aa-48fa-8569-90f0e8ccfbc0}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+</Project>
