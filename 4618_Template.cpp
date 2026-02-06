@@ -7,6 +7,7 @@
 ////////////////////////////////////////////////////////////////
 #include "stdafx.h"
 
+//check in 
 // Add simple GUI elements
 #define CVUI_DISABLE_COMPILATION_NOTICES
 #define CVUI_IMPLEMENTATION
