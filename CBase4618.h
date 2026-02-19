@@ -6,15 +6,19 @@
 class CBase4618
 {
 protected:
+	CControl _comm;
+	cv::Mat _canvas;
+
+	bool _user_exit = false;
 
 public:
 	CBase4618();
 	~CBase4618();
 
-	void gpio();
-	void update();
-	bool draw();
+	virtual void gpio() = 0;
+	virtual void update() = 0;
+	virtual bool draw() = 0;
 
-	void run()
+	void run();
 
 };

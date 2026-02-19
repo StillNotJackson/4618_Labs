@@ -73,6 +73,6 @@ public:
 	* @param channel Digital channel of button
 	* @return True on sucessful read of button, false on fail
 	*/
-	bool CControl::get_button(int channel);
+	bool get_button(int channel);
 };
 

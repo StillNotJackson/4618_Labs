@@ -1,7 +1,9 @@
 #pragma once
 #include "CBase4618.h"
-class CSketch :
-    public CBase4618
+#include "cvui.h"
+#include <string>
+
+class CSketch : public CBase4618
 {
 private:
     cv::Size _size;
@@ -9,8 +11,11 @@ private:
     int _colour = 0;
     bool _reset = false;
 
+    cv::Point _pos_cur;
+    cv::Point _pos_prev;
+
 public:
-    CSketch(cv::Size& size_canvase, int comm_port);
+    CSketch(cv::Size size_canvas, int comm_port);
     ~CSketch();
 
     void gpio();

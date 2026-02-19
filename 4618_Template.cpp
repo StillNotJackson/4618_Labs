@@ -7,11 +7,6 @@
 ////////////////////////////////////////////////////////////////
 #include "stdafx.h"
 
-
-#define CVUI_DISABLE_COMPILATION_NOTICES
-#define CVUI_IMPLEMENTATION
-#include "cvui.h"
-
 #include <string>
 #include <iostream>
 #include <fstream>
@@ -23,6 +18,13 @@
 #include "Lab3.h"
 
 #include "CControl.h"
+#include "CSketch.h"
+
+#define CVUI_DISABLE_COMPILATION_NOTICES
+#define CVUI_IMPLEMENTATION
+#include "cvui.h"
+
+
 /*
 #include "Client.h"
 #include "Server.h"
@@ -464,6 +466,8 @@ void lab3()
 ////////////////////////////////////////////////////////////////
 void lab4()
 {
+    CSketch sketch(cv::Size(640, 480), 4);
+    sketch.run();
 }
 
 ////////////////////////////////////////////////////////////////
