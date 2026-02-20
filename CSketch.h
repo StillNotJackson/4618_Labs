@@ -15,6 +15,8 @@ private:
     cv::Point _pos_cur;
     cv::Point _pos_prev;
 
+    cv::Mat gen_UI();
+
 public:
     CSketch(cv::Size size_canvas, int comm_port);
     ~CSketch();

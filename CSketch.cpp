@@ -16,6 +16,8 @@
 #define WINDOW_NAME "Etch-A-Sketch"
 #define CURSOR_SPEED 25
 
+
+
 CSketch::CSketch(cv::Size size_canvas, int comm_port)
 {
 	_size = size_canvas;
@@ -75,8 +77,8 @@ void CSketch::update()
 	if (_pos_cur.x > _size.width - 1)
 		_pos_cur.x = _size.width - 1;
 
-	if (_pos_cur.y < 80)
-		_pos_cur.y = 80;
+	if (_pos_cur.y < 0)
+		_pos_cur.y = 0;
 	if (_pos_cur.y > _size.height - 1)
 		_pos_cur.y = _size.height - 1;
 
@@ -86,26 +88,45 @@ bool CSketch::draw()
 {
 	// Praise this man https://fernandobevilacqua.com/cvui/components/button/
 	cvui::context(WINDOW_NAME);
-	if (cvui::button(_canvas, 100, 45, 80, 30, "Exit"))
+
+	cv::Mat frame = gen_UI();
+
+	if (cvui::button(frame, 100, 65, 70, 25, "Exit"))
 	{
 		return false;//kills loop
 	}
-	if (cvui::button(_canvas, 10, 45, 80, 30, "Reset"))
+	if (cvui::button(frame, 20, 65, 70, 25, "Reset"))
 	{
 		_reset = true;
 	}
+
 	if (_reset)
 	{
 		_canvas = cv::Mat::zeros(_size, CV_8UC3);
 		_pos_cur = cv::Point(_size.width / 2, _size.height / 2);
 		_pos_prev = _pos_cur;
 
+		frame = gen_UI();
+
 		_reset = false;
 	}
 	//cv::line(_canvas, _pos_prev, _pos_cur, _colour, 2);//Might need a funciton for _colour
 	cv::line(_canvas, _pos_prev, _pos_cur, cv::Scalar(255, 255, 255), 2);
 	cvui::update(WINDOW_NAME);
-	cv::imshow(WINDOW_NAME, _canvas);
-	
+	//cv::imshow(WINDOW_NAME, _canvas);
+	cv::imshow(WINDOW_NAME, frame);
+
 	return true; //return true continues loop
+}
+
+cv::Mat CSketch::gen_UI()
+{
+	const int UI_lft = 10, UI_rgt = 170, UI_top = 10, UI_bot = 90;
+
+	cv::Mat frame = _canvas.clone();
+	cv::rectangle(frame, cv::Rect(UI_lft, UI_top, UI_rgt, UI_bot), cv::Scalar(60, 60, 60), cv::FILLED);
+	cvui::text(frame, UI_lft + 10, UI_top + 12, WINDOW_NAME);
+	cvui::text(frame, UI_lft + 10, UI_top + 32, "Colour: whatever");
+
+	return frame;
 }
