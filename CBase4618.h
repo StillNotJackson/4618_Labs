@@ -54,6 +54,6 @@ public:
 	* Calls gpio() and update() each iteration, then calls draw().
 	* Exits when draw() returns false or when the user presses 'q' / 'Q'.
 	*/
-	void run();
+	virtual void run();
 
 };

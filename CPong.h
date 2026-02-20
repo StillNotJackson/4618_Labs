@@ -6,6 +6,13 @@ class CPong : public CBase4618
 {
 private:
     cv::Mat _canvas;
+	cv::Size _size = cv::Size(1000, 800);
+
+    std::mutex _mutex;
+    bool _is_running;
+
+    /** When true, the next draw() iteration clears the canvas and recentres the cursor. */
+    bool _reset = false;
 
     // Ball Stuff
     cv::Point2f _ball_pos;
@@ -15,21 +22,24 @@ private:
 
     // paddle & score
     int _paddle_player_y;
-    int _paddle_comp_y;
+    int _paddle_pc_y;
     int _score_player;
-    int _score_comp;
+    int _score_pc;
 
     // Timing for FPS
     double _last_tick;
     double _fps;
 
-    void reset_game();
+
 
 public:
-    CPong();
+    CPong(int comm_port);
     ~CPong();
 
-    
+    void run() override;
+    void update_thread();
+    void update_gpio();
+
     void gpio();
     void update();
     bool draw();

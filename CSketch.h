@@ -24,28 +24,28 @@
 class CSketch : public CBase4618
 {
 private:
-    /** Canvas size in pixels (width x height). */
+    /// Canvas size in pixels (width x height).
     cv::Size _size;
 
-    /** Current drawing colour in BGR order. Default is red (B=0, G=0, R=255). */
+    /// Current drawing colour in BGR order. Default is red (B=0, G=0, R=255). 
     cv::Scalar _colour = cv::Scalar(0, 0, 255);
 
-    /** Colour selection token/index used to cycle or select preset colours. */
+    /// Colour selection token/index used to cycle or select preset colours.
     int _colour_token = 0;
 
-    /** Debounce flag for the S2 button. True when S2 was considered pressed on the previous sample. */
+    /// Debounce flag for the S2 button. True when S2 was considered pressed on the previous sample.
     bool _s2_state = false; // my stupid fix for debouncing
 
-    /** When true, the next draw() iteration clears the canvas and recentres the cursor. */
+    /// When true, the next draw() iteration clears the canvas and recentres the cursor. */
     bool _reset = false;
 
-    /** Raw joystick position mapped into canvas coordinates. */
+    /// Raw joystick position mapped into canvas coordinates. */
     cv::Point _raw_joystick;
 
-    /** Current cursor position on the canvas. */
+    /// Current cursor position on the canvas. */
     cv::Point _pos_cur;
 
-    /** Previous cursor position (used for drawing line segments). */
+    /// Previous cursor position (used for drawing line segments). */
     cv::Point _pos_prev;
 
     /**
