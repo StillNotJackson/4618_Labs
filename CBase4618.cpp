@@ -3,6 +3,9 @@
 #include "cvui.h"
 #include "Lab3.h"
 
+#define CHAN_LED_RED 39
+#define CHAN_LED_GRN 38
+#define CHAN_LED_BLU 37
 
 CBase4618::CBase4618()
 {
@@ -43,4 +46,7 @@ void CBase4618::run()
 		*/
 	}
 	cv::destroyAllWindows();
+	_comm.set_data(DIGITAL, CHAN_LED_RED, 0);
+	_comm.set_data(DIGITAL, CHAN_LED_GRN, 0);
+	_comm.set_data(DIGITAL, CHAN_LED_BLU, 0);
 }

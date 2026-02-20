@@ -1,6 +1,7 @@
 #include "stdafx.h"
 #include "CSketch.h"
 #include <opencv2/core.hpp>
+
 //#include "cvui.h"
 
 #define CHAN_LED_RED 39
@@ -22,10 +23,11 @@ CSketch::CSketch(cv::Size size_canvas, int comm_port)
 {
 	_size = size_canvas;
 	_comm.init_com(comm_port);
+	_comm.set_data(DIGITAL, CHAN_LED_RED, 1);
 
 	_canvas = cv::Mat::zeros(_size, CV_8UC3);//8 unsigned bits with 3 channels
 	cvui::init("Etch-A-Sketch");
-	//cv::setMouseCallback(WINDOW_NAME, 
+	
 
 	//Cursor init
 	_pos_cur = cv::Point(_size.width / 2, _size.height / 2); // Start Cursor in middle of window
@@ -46,14 +48,43 @@ void CSketch::gpio()
 	{
 		_reset = true;
 	}
-	//if (_comm.get_button(CHAN_S2)//colour button
-	//TODO Colour change on button press based off _colour value
+
+	bool S2_cur = _comm.get_button(CHAN_S2);
+	if (S2_cur && !_s2_state)
+	{
+		_colour_token++;
+		//if (_colour_token > 2) _colour_token = 0;
+		switch (_colour_token % 3)
+		{
+		case 0://red
+		{
+			_colour = cv::Scalar(0, 0, 255);
+			_comm.set_data(DIGITAL, CHAN_LED_BLU, 0);
+			_comm.set_data(DIGITAL, CHAN_LED_RED, 1);
+			break;
+		}
+		case 1://green
+		{
+			_colour = cv::Scalar(0, 255, 0);
+			_comm.set_data(DIGITAL, CHAN_LED_RED, 0);
+			_comm.set_data(DIGITAL, CHAN_LED_GRN, 1);
+			break;
+		}
+		case 2://blue
+		{
+			_colour = cv::Scalar(255, 0, 0);
+			_comm.set_data(DIGITAL, CHAN_LED_GRN, 0);
+			_comm.set_data(DIGITAL, CHAN_LED_BLU, 1);
+			//_colour_token = _colour_token - 3;
+			break;
+		}
+		}
+	}
+	_s2_state = S2_cur;
 }
 void CSketch::update()
 {
 	_pos_prev = _pos_cur;
-
-	//if (_comm.get_button(CHAN_S2)//colour button
 
 	int dx = _raw_joystick.x - (_size.width / 2);
 	int dy = _raw_joystick.y - (_size.height / 2);
@@ -111,7 +142,7 @@ bool CSketch::draw()
 		_reset = false;
 	}
 	//cv::line(_canvas, _pos_prev, _pos_cur, _colour, 2);//Might need a funciton for _colour
-	cv::line(_canvas, _pos_prev, _pos_cur, cv::Scalar(255, 255, 255), 2);
+	cv::line(_canvas, _pos_prev, _pos_cur, _colour, 2);
 	cvui::update(WINDOW_NAME);
 	//cv::imshow(WINDOW_NAME, _canvas);
 	cv::imshow(WINDOW_NAME, frame);
@@ -122,11 +153,32 @@ bool CSketch::draw()
 cv::Mat CSketch::gen_UI()
 {
 	const int UI_lft = 10, UI_rgt = 170, UI_top = 10, UI_bot = 90;
+	std::string colour_name = "Red";
+
 
 	cv::Mat frame = _canvas.clone();
 	cv::rectangle(frame, cv::Rect(UI_lft, UI_top, UI_rgt, UI_bot), cv::Scalar(60, 60, 60), cv::FILLED);
 	cvui::text(frame, UI_lft + 10, UI_top + 12, WINDOW_NAME);
-	cvui::text(frame, UI_lft + 10, UI_top + 32, "Colour: whatever");
+
+	switch (_colour_token % 3)
+	{
+	case 0:
+	{
+		colour_name = "Red";
+		break;
+	}
+	case 1:
+	{
+		colour_name = "Green";
+		break;
+	}
+	case 2:
+	{
+		colour_name = "Blue";
+		break;
+	}
+	}
+	cvui::text(frame, UI_lft + 10, UI_top + 32, "Colour: " + colour_name);
 
 	return frame;
 }

@@ -8,7 +8,10 @@ class CSketch : public CBase4618
 private:
     cv::Size _size;
 
-    int _colour = 0;
+    cv::Scalar _colour = cv::Scalar(0, 0, 255); //default red
+    int _colour_token = 0;
+    bool _s2_state; // my stupid fix for debouncing
+
     bool _reset = false;
 
     cv::Point _raw_joystick;
