@@ -23,6 +23,9 @@
     <ClCompile Include="CSketch.cpp">
       <Filter>Lab 4</Filter>
     </ClCompile>
+    <ClCompile Include="CPong.cpp">
+      <Filter>Lab 5</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="cvui.h" />
@@ -48,6 +51,9 @@
     <ClInclude Include="CSketch.h">
       <Filter>Lab 4</Filter>
     </ClInclude>
+    <ClInclude Include="CPong.h">
+      <Filter>Lab 5</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <Filter Include="Lab 2">
@@ -58,6 +64,9 @@
     </Filter>
     <Filter Include="Lab 4">
       <UniqueIdentifier>{b783e8cc-43aa-48fa-8569-90f0e8ccfbc0}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Lab 5">
+      <UniqueIdentifier>{e9af789a-5d35-446d-946d-8364f5b31839}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
 </Project>

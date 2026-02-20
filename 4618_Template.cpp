@@ -19,6 +19,7 @@
 
 #include "CControl.h"
 #include "CSketch.h"
+#include "CPong.h"
 
 #define CVUI_DISABLE_COMPILATION_NOTICES
 #define CVUI_IMPLEMENTATION
@@ -475,6 +476,8 @@ void lab4()
 ////////////////////////////////////////////////////////////////
 void lab5()
 {
+    CPong pong;
+	pong.run();
 }
 
 ////////////////////////////////////////////////////////////////

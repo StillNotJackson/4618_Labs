@@ -92,6 +92,7 @@
     <ClInclude Include="CBase4618.h" />
     <ClInclude Include="CControl.h" />
     <ClInclude Include="CCourse.h" />
+    <ClInclude Include="CPong.h" />
     <ClInclude Include="CSketch.h" />
     <ClInclude Include="CStudent.h" />
     <ClInclude Include="cvui.h" />
@@ -106,6 +107,7 @@
     <ClCompile Include="CBase4618.cpp" />
     <ClCompile Include="CControl.cpp" />
     <ClCompile Include="CCourse.cpp" />
+    <ClCompile Include="CPong.cpp" />
     <ClCompile Include="CSketch.cpp" />
     <ClCompile Include="CStudent.cpp" />
     <ClCompile Include="Lab3.cpp" />
