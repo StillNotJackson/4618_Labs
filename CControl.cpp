@@ -20,6 +20,7 @@ void CControl::init_com(int comport)
 	_com.open(port);
 }
 
+/*
 bool CControl::get_data(int type, int channel, int &result)
 {
 
@@ -32,7 +33,7 @@ bool CControl::get_data(int type, int channel, int &result)
 	std::string rx_str = "";
 	double start_time = GetTickCount();
 
-	while ( GetTickCount() - start_time < 1000)/*rx_str[0] != '\n') &&*/
+	while ( GetTickCount() - start_time < 1000)
 	{
 		if (_com.read(&rx_buffer, 1) > 0)
 		{
@@ -55,6 +56,36 @@ bool CControl::get_data(int type, int channel, int &result)
 		return true;
 	}
 	return false; //catch all 
+}
+*/
+
+bool CControl::get_data(int type, int channel, int& result)
+{
+	std::string rx_cmd = "G " + std::to_string(type) + " " + std::to_string(channel) + "\n";
+	_com.write(rx_cmd.c_str(), rx_cmd.length());
+
+	char rx_buffer = 0;
+	std::string rx_str = "";
+	double start_time = GetTickCount();
+
+	// REDUCE TIMEOUT: Change 1000 to 50ms for real-time responsiveness
+	while (GetTickCount() - start_time < 50)
+	{
+		if (_com.read(&rx_buffer, 1) > 0)
+		{
+			rx_str += rx_buffer;
+			if (rx_buffer == '\n') break;
+		}
+	}
+
+	char rx_ack;
+	int rx_type, rx_chan, rx_val;
+	if (sscanf(rx_str.c_str(), " %c %d %d %d", &rx_ack, &rx_type, &rx_chan, &rx_val) == 4)
+	{
+		result = rx_val;
+		return true;
+	}
+	return false;
 }
 
 bool CControl::set_data(int type, int channel, int value)
@@ -83,6 +114,7 @@ bool CControl::set_data(int type, int channel, int value)
 	return (tx_str.size() > 0 && tx_str[0] == 'A');
 }
 
+
 float CControl::get_analog(int channel)
 {
 	int anal_value = 0;
@@ -93,7 +125,7 @@ float CControl::get_analog(int channel)
 	}
 	return (anal_value / 4096.0f * 100.0f);
 }
-
+/*
 bool CControl::get_button(int channel)
 {
 	// STATIC BUTTON_STATE MIGHT BE A PROBLEM IF S1 AND S2 ARE CALLED INTERCHANGABLY
@@ -110,6 +142,29 @@ bool CControl::get_button(int channel)
 	if (button_press == 0 && button_state == 1)
 	{
 		if (GetTickCount() - time_press > 750)//lab says 1 sec but thats too long
+		{
+			time_press = GetTickCount();
+			button_state = button_press;
+			return true;
+		}
+	}
+	button_state = button_press;
+	return false;
+}
+
+*/
+bool CControl::get_button(int channel)
+{
+	// FIX: time_press MUST be static to remember the last time it was pressed
+	static double time_press = 0;
+	int button_press;
+	static int button_state = 0;
+
+	if (!get_data(DIGITAL, channel, button_press)) return false;
+
+	if (button_press == 0 && button_state == 1) // Falling edge
+	{
+		if (GetTickCount() - time_press > 750)
 		{
 			time_press = GetTickCount();
 			button_state = button_press;
