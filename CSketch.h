@@ -11,6 +11,7 @@ private:
     int _colour = 0;
     bool _reset = false;
 
+    cv::Point _raw_joystick;
     cv::Point _pos_cur;
     cv::Point _pos_prev;
 

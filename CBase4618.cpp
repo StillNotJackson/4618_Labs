@@ -17,6 +17,7 @@ CBase4618::~CBase4618()
 
 void CBase4618::run()
 {
+	bool quit_flag = false;
 	while (true)    //while(true) is bad, but lab3::user_exit sould cya
 	{
 		gpio();
@@ -27,10 +28,19 @@ void CBase4618::run()
 			break;
 		}
 
-		// key = cv::waitKey(10);
+		int key = cv::waitKey(1);
+		if (key == 'q' || key == 'Q')
+		{
+			break;
+		}
+
+
+		/*
 		if (user_exit())//might have a linker problem
 		{
 			break;
 		}
+		*/
 	}
+	cv::destroyAllWindows();
 }
