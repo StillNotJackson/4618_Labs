@@ -64,11 +64,11 @@ public:
     /** @brief Destructor. */
     ~CSketch();
 
-    /** @copydoc CBase4618::gpio */
+    ///@copydoc CBase4618::gpio
     void gpio();
-    /** @copydoc CBase4618::update */
+    /// @copydoc CBase4618::update 
     void update();
-    /** @copydoc CBase4618::draw */
+    /// @copydoc CBase4618::draw 
     bool draw(); //bool for exit function
 
 };
