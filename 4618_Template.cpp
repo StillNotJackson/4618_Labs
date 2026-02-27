@@ -20,6 +20,7 @@
 #include "CControl.h"
 #include "CSketch.h"
 #include "CPong.h"
+#include "CAsteroids.h"
 
 #define CVUI_DISABLE_COMPILATION_NOTICES
 #define CVUI_IMPLEMENTATION
@@ -485,6 +486,8 @@ void lab5()
 ////////////////////////////////////////////////////////////////
 void lab6()
 {
+	CAsteroidGame asteroids(4);
+	asteroids.run();
 }
 
 void print_menu()

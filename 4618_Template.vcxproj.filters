@@ -26,6 +26,9 @@
     <ClCompile Include="CPong.cpp">
       <Filter>Lab 5</Filter>
     </ClCompile>
+    <ClCompile Include="CAsteroids.cpp">
+      <Filter>Lab 6</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="cvui.h" />
@@ -54,6 +57,9 @@
     <ClInclude Include="CPong.h">
       <Filter>Lab 5</Filter>
     </ClInclude>
+    <ClInclude Include="CAsteroids.h">
+      <Filter>Lab 6</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <Filter Include="Lab 2">
@@ -67,6 +73,9 @@
     </Filter>
     <Filter Include="Lab 5">
       <UniqueIdentifier>{e9af789a-5d35-446d-946d-8364f5b31839}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Lab 6">
+      <UniqueIdentifier>{d646b446-8d06-439b-a559-ae815552dd3d}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
 </Project>

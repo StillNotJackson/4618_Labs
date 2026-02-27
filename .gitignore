@@ -36,3 +36,5 @@
 
 *.bak
 /Doxygen
+/html
+/latex

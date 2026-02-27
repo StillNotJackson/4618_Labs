@@ -89,6 +89,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClInclude Include="CAsteroids.h" />
     <ClInclude Include="CBase4618.h" />
     <ClInclude Include="CControl.h" />
     <ClInclude Include="CCourse.h" />
@@ -104,6 +105,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="4618_Template.cpp" />
+    <ClCompile Include="CAsteroids.cpp" />
     <ClCompile Include="CBase4618.cpp" />
     <ClCompile Include="CControl.cpp" />
     <ClCompile Include="CCourse.cpp" />
