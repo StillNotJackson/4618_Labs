@@ -75,13 +75,16 @@ void CPong::gpio()
     }
 }
 
+
 void CPong::update()
 {
     // Timing calculation for smooth movement
+    
     double current_tick = (double)cv::getTickCount();
     double delta_t = (current_tick - _last_tick) / cv::getTickFrequency();
     _last_tick = current_tick;
-    _fps = 1.0 / delta_t;
+    //_fps = 1.0 / delta_t;
+    
 
     // Move ball
     _ball_pos += _ball_dir * (float)(_ball_speed * delta_t);
@@ -98,7 +101,7 @@ void CPong::update()
 
     // Paddle Collision (player)
     // Check if ball x is near paddle and y is within paddle height
-    if (_ball_pos.x > 950 - _ball_radius && abs(_ball_pos.y - _paddle_player_y) < 60) // 60 is half paddle height + buffer
+    if (_ball_pos.x > 970 - _ball_radius && abs(_ball_pos.y - _paddle_player_y) < 60) // 60 is half paddle height + buffer
     {
         _ball_dir.x *= -1;
         _ball_pos.x = 950 - _ball_radius;
@@ -120,6 +123,7 @@ void CPong::update()
         _ball_pos = cv::Point2f(_size.width / 2, _size.height / 2);
     }
 }
+
 
 bool CPong::draw()
 {
@@ -165,22 +169,91 @@ bool CPong::draw()
         cvui::printf(_canvas, _size.width / 2, _size.height / 2, "Game Over! %s wins!", _score_player > _score_pc ? "Player" : "Computer");
         reset();
 	}
-	cv::waitKey(1);
+	//cv::waitKey(1);
 
 
     cvui::update();
     cv::imshow(WINDOW_NAME, _canvas);
     return true;
 }
-
+/*
 void CPong::run()
 {
     _is_running = true;
 
 	//GPIO multi-threading
-    std::thread t1(&CPong::update_gpio, this);
-    t1.detach(); 
+    std::thread t_gpio(&CPong::update_gpio, this);
+	std::thread t_update(&CPong::update_thread, this);
+	
+	const double target_fps = 30.0;
+	const double target_ms = 1000.0 / target_fps;
+    /*
+    while (_is_running)
+    {
+		double start_time = (double)cv::getTickCount();
+   
 
+        _mutex.lock();
+        bool active_play = draw();
+        _mutex.unlock();
+
+        double draw_time = ((((double)cv::getTickCount()) - start_time) / cv::getTickFrequency()) *1000.0; // in milliseconds
+
+		int delay = (int)(target_frame_time - (draw_time));
+        if (delay < 1)
+        {
+            delay = 1;
+        }
+
+        int key = cv::waitKey(delay);
+
+        double end_time = (double)cv::getTickCount();
+        double total_time = (end_time - start_time) / cv::getTickFrequency();
+        _fps = 1 / total_time;
+
+        //if (!active_play || cv::waitKey(delay) == 'q')
+        if (!active_play || key == 'q')
+        {
+            _is_running = false;
+        }
+    }
+    /////
+
+
+    while (_is_running)
+    {
+        double start = (double)cv::getTickCount();
+
+        _mutex.lock();
+        bool active_play = draw();
+        _mutex.unlock();
+
+        // Always pump window events
+        int key = cv::waitKey(1);
+
+        double after = (double)cv::getTickCount();
+        double frame_ms = (after - start) * 1000.0 / cv::getTickFrequency();
+
+        // sleep only if we are faster than target
+        double remaining_ms = target_ms - frame_ms;
+        if (remaining_ms > 0)
+            std::this_thread::sleep_for(std::chrono::milliseconds((int)remaining_ms));
+
+        // Measure full frame including sleep
+        double end = (double)cv::getTickCount();
+        double total_s = (end - start) / cv::getTickFrequency();
+        _fps = 1.0 / total_s;
+
+        if (!active_play || key == 'q')
+            _is_running = false;
+    }
+
+	if (t_gpio.joinable()) t_gpio.join();
+    if (t_update.joinable()) t_update.join();
+	//if (t_draw.joinable()) t_draw.join();
+
+
+    /*
     while (_is_running)
     {
         update();
@@ -190,24 +263,60 @@ void CPong::run()
             _is_running = false;
         }
 
-
         if (cv::waitKey(10) == 'q') // <-------------- This fucking thing controls the fps somehow
         {
             _is_running = false;
         }
+        
+    }/////////
+    cv::destroyAllWindows();
+}*/
+void CPong::run()
+{
+    _is_running = true;
+
+    std::thread t_gpio(&CPong::update_gpio, this);
+    std::thread t_update(&CPong::update_thread, this);
+
+    // 30 FPS = 33.333 milliseconds per frame
+    const double target_frame_time = 1.0 / 30.0;
+
+    while (_is_running)
+    {
+        double start_time = (double)cv::getTickCount() / cv::getTickFrequency();
+
+      
+        _mutex.lock();
+        bool active_play = draw();
+        _mutex.unlock();
+
+        int key = cv::waitKey(1);
+
+        double current_time;
+        do {
+            current_time = (double)cv::getTickCount() / cv::getTickFrequency();
+        } while ((current_time - start_time) < target_frame_time);
+
+        double end_time = (double)cv::getTickCount() / cv::getTickFrequency();
+        _fps = 1.0 / (end_time - start_time);
+
+        if (!active_play || key == 'q')
+            _is_running = false;
     }
+
+    if (t_gpio.joinable()) t_gpio.join();
+    if (t_update.joinable()) t_update.join();
     cv::destroyAllWindows();
 }
-
 
 void CPong::update_thread()
 {
     while (_is_running)
     {
         _mutex.lock();
-        gpio();
+        update();
         _mutex.unlock();
-        std::this_thread::sleep_for(std::chrono::milliseconds(10));
+        std::this_thread::sleep_for(std::chrono::milliseconds(5));
     }
 }
 
@@ -219,8 +328,7 @@ void CPong::update_gpio()
         gpio();
         _mutex.unlock();
         
-
-        std::this_thread::sleep_for(std::chrono::milliseconds(1));
+        std::this_thread::sleep_for(std::chrono::milliseconds(10));
     }
 }
 
@@ -235,3 +343,7 @@ void CPong::reset()
     _paddle_pc_y = _size.height / 2;
 }
 
+void::CPong::draw_thread()
+{
+
+}
