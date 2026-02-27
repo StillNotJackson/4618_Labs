@@ -25,13 +25,7 @@ CPong::CPong(int comm_port)
 
     _last_tick = (double)cv::getTickCount();
 
-    _ball_pos = cv::Point2f(_size.width / 2, _size.height / 2);
-    _ball_dir = cv::Point2f(1.0f, 0.5f);
-
-    _score_player = 0;
-    _score_pc = 0;
-    _paddle_player_y = _size.height / 2;
-    _paddle_pc_y = _size.height / 2;
+    reset();
 }
 
 CPong::~CPong()
@@ -53,16 +47,26 @@ void CPong::gpio()
 
     _paddle_player_y = (int)((_comm.get_analog(CHAN_JOY_VER)/100.f) * _size.height);
 
+    //Player collision with wall
     const int paddle_half = 50;
     if (_paddle_player_y < paddle_half)
     {
-        _paddle_player_y = paddle_half;
+        _paddle_player_y += paddle_half;
     }
-
     if (_paddle_player_y > (_size.height - paddle_half))
     {
         _paddle_player_y = _size.height - paddle_half;
     }
+
+    // PC collision with wall
+     if (_paddle_pc_y < paddle_half)
+    {
+        _paddle_pc_y += paddle_half;
+	 }
+     if (_paddle_pc_y > (_size.height - paddle_half))
+    {
+        _paddle_pc_y = _size.height - paddle_half;
+	 }
 
 
     if (_comm.get_button(CHAN_S1))
@@ -85,23 +89,19 @@ void CPong::update()
     //comp paddle
 	_paddle_pc_y = (int)_ball_pos.y;
 
-    // Wall Collisions (Top and Bottom)
-    
-
-
-    if ((_ball_pos.y + _ball_radius) < _ball_radius || (_ball_pos.y+_ball_radius) > 800)// - _ball_radius)
+    // Wall Collision
+    //if ((_ball_pos.y + _ball_radius) < _ball_radius || (_ball_pos.y+_ball_radius) > _size.height)// - _ball_radius)
+    if (_ball_pos.y < _ball_radius || (_ball_pos.y + _ball_radius) > _size.height)// - _ball_radius)
     {
         _ball_dir.y *= -1;
     }
 
-
-
-    // Paddle Collision (Player - Right Side)
+    // Paddle Collision (player)
     // Check if ball x is near paddle and y is within paddle height
     if (_ball_pos.x > 950 - _ball_radius && abs(_ball_pos.y - _paddle_player_y) < 60) // 60 is half paddle height + buffer
     {
         _ball_dir.x *= -1;
-        _ball_pos.x = 950 - _ball_radius; // Prevent "sticking" to paddle
+        _ball_pos.x = 950 - _ball_radius;
     }
 
     if (_ball_pos.x < 30 + _ball_radius && abs(_ball_pos.y - _paddle_pc_y) < 60) // Left paddle
@@ -110,7 +110,7 @@ void CPong::update()
         _ball_pos.x = 30 + _ball_radius;
 	}
 
-    // Scoring Logic (Ball goes past paddles)
+    // Scoring 
     if (_ball_pos.x < _ball_radius) {
         _score_player++;
         _ball_pos = cv::Point2f(_size.width / 2, _size.height / 2); // Reset to middle
@@ -123,46 +123,7 @@ void CPong::update()
 
 bool CPong::draw()
 {
-    //_canvas = cv::Mat::zeros(800, 1000, CV_8UC3);
     _canvas.setTo(cv::Scalar(0, 0, 0));
-
-    cvui::window(_canvas, 10, 10, 220, 250, "Pong Menu");
-
- 
-    cvui::printf(_canvas, 15, 35, "FPS: %.2f", _fps);
-    cvui::printf(_canvas, 15, 55, "Player: %d   Computer: %d", _score_player, _score_pc);
-
-    cvui::printf(_canvas, 15, 80, "Radius");
-    cvui::trackbar(_canvas, 15, 95, 180, &_ball_radius, 5, 100);
-
-
-    cvui::printf(_canvas, 15, 145, "Speed");
-    cvui::trackbar(_canvas, 15, 160, 180, &_ball_speed, 100, 400);
-
-
-    if (cvui::button(_canvas, 120, 210, "Exit")) 
-    {
-        return false;
-    }
-    if (cvui::button(_canvas, 20, 210, "Reset"))
-    {
-        _reset = true;
-    }
-   
-    if (_reset)
-    {
-        _ball_pos = cv::Point2f(_size.width / 2, _size.height / 2);
-        _ball_dir = cv::Point2f(1.0f, 0.5f);
-
-        _score_player = 0;
-        _score_pc = 0;
-        _paddle_player_y = _size.height / 2;
-        _paddle_pc_y = _size.height / 2;
-
-        _reset = false;
-    }
-
-    
 
     cv::Rect player_paddle(970, _paddle_player_y - 50, 20, 100);
     cv::rectangle(_canvas, player_paddle, cv::Scalar(255, 255, 255), cv::FILLED);
@@ -172,10 +133,43 @@ bool CPong::draw()
 
     cv::circle(_canvas, _ball_pos, _ball_radius, cv::Scalar(255, 255, 255), cv::FILLED);
 
+    cvui::window(_canvas, 10, 10, 220, 250, "Pong Menu");
+
+    cvui::printf(_canvas, 15, 35, "FPS: %.2f", _fps);
+    cvui::printf(_canvas, 15, 55, "Player: %d   Computer: %d", _score_player, _score_pc);
+
+    cvui::printf(_canvas, 15, 80, "Radius");
+    cvui::trackbar(_canvas, 15, 95, 180, &_ball_radius, 5, 100);
+
+    cvui::printf(_canvas, 15, 145, "Speed");
+    cvui::trackbar(_canvas, 15, 160, 180, &_ball_speed, 100, 400);
+
+
+    if (cvui::button(_canvas, 120, 210, "Exit"))
+    {
+        return false;
+    }
+    if (cvui::button(_canvas, 20, 210, "Reset"))
+    {
+        _reset = true;
+    }
+
+    if (_reset)
+    {
+        reset();
+        _reset = false;
+    }
+
+    if (_score_pc >= 5 || _score_player >= 5)
+    {
+        cvui::printf(_canvas, _size.width / 2, _size.height / 2, "Game Over! %s wins!", _score_player > _score_pc ? "Player" : "Computer");
+        reset();
+	}
 	cv::waitKey(1);
+
+
     cvui::update();
     cv::imshow(WINDOW_NAME, _canvas);
-
     return true;
 }
 
@@ -183,23 +177,21 @@ void CPong::run()
 {
     _is_running = true;
 
-    // Start the thread for serial communication (GPIO)
+	//GPIO multi-threading
     std::thread t1(&CPong::update_gpio, this);
-    t1.detach(); // Let it run independently
+    t1.detach(); 
 
     while (_is_running)
     {
-        // 1. Process Physics/Logic
         update();
 
-        // 2. Draw everything
         if (!draw())
         {
             _is_running = false;
         }
 
 
-        if (cv::waitKey(10) == 'q') // <-------------- This fucking thing controls the fps
+        if (cv::waitKey(10) == 'q') // <-------------- This fucking thing controls the fps somehow
         {
             _is_running = false;
         }
@@ -207,11 +199,11 @@ void CPong::run()
     cv::destroyAllWindows();
 }
 
+
 void CPong::update_thread()
 {
     while (_is_running)
     {
-        // Thread-safe GPIO polling
         _mutex.lock();
         gpio();
         _mutex.unlock();
@@ -224,10 +216,22 @@ void CPong::update_gpio()
     while (_is_running)
     {
         _mutex.lock();
-        gpio(); // Call your existing serial read code
+        gpio();
         _mutex.unlock();
         
-        // Don't overwhelm the CPU
+
         std::this_thread::sleep_for(std::chrono::milliseconds(1));
     }
 }
+
+void CPong::reset()
+{
+    _ball_pos = cv::Point2f(_size.width / 2, _size.height / 2);
+    _ball_dir = cv::Point2f(1.0f, 0.5f);
+
+    _score_player = 0;
+    _score_pc = 0;
+    _paddle_player_y = _size.height / 2;
+    _paddle_pc_y = _size.height / 2;
+}
+

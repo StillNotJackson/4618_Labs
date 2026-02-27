@@ -11,7 +11,7 @@ private:
     std::mutex _mutex;
     bool _is_running;
 
-    /** When true, the next draw() iteration clears the canvas and recentres the cursor. */
+
     bool _reset = false;
 
     // Ball Stuff
@@ -26,7 +26,6 @@ private:
     int _score_player;
     int _score_pc;
 
-    // Timing for FPS
     double _last_tick;
     double _fps;
 
@@ -43,5 +42,8 @@ public:
     void gpio();
     void update();
     bool draw();
+    void reset();
+
+	
 };
 
