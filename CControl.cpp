@@ -156,7 +156,8 @@ bool CControl::get_button(int channel)
 bool CControl::get_button(int channel)
 {
 	// FIX: time_press MUST be static to remember the last time it was pressed
-	static double time_press = 0;
+	//static double time_press = 0;
+	double time_press = 0;
 	int button_press;
 	static int button_state = 0;
 
