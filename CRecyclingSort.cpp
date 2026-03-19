@@ -5,16 +5,22 @@
 CRecyclingSort::CRecyclingSort()
 {
 	// TODO: Init Camera object and cvui
+	_video.open(0); 
 
+	_video.set(cv::CAP_PROP_FRAME_WIDTH, 640);
+	_video.set(cv::CAP_PROP_FRAME_HEIGHT, 480);
 }
 
 CRecyclingSort::~CRecyclingSort()
 {
+	_video.release();
 }
 
 void CRecyclingSort::gpio()
 {//TODO: Read camera frame and store in _frame
 	// Activate servos depending on item # flag
+
+	_video >> _frame;
 
 }
 
