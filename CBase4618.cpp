@@ -9,19 +9,17 @@
 
 CBase4618::CBase4618()
 {
-
 }
 
 
 CBase4618::~CBase4618()
 {
-
 }
 
 void CBase4618::run()
 {
 	bool quit_flag = false;
-	while (true)    //while(true) is bad, but lab3::user_exit sould cya
+	while (true)  
 	{
 		gpio();
 		update();
@@ -36,14 +34,7 @@ void CBase4618::run()
 		{
 			break;
 		}
-
-
-		/*
-		if (user_exit())//might have a linker problem
-		{
-			break;
-		}
-		*/
+		
 	}
 	cv::destroyAllWindows();
 	_comm.set_data(DIGITAL, CHAN_LED_RED, 0);
