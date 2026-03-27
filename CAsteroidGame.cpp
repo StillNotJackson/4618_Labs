@@ -21,6 +21,18 @@ CAsteroidGame::CAsteroidGame(int port) {
     srand(time(nullptr));
 
     _canvas = Mat::zeros(600, 800, CV_8UC3);
+    _background = Mat::zeros(600, 800, CV_8UC3);
+    int num_stars = 150; // Adjust for more or fewer stars
+    for (int i = 0; i < num_stars; i++) {
+        int x = rand() % _background.cols;
+        int y = rand() % _background.rows;
+        // Generate a random brightness for a twinkling effect
+        int brightness = rand() % 155 + 100;
+
+        // Draw the star. A 1-pixel circle is perfect for a star.
+        cv::circle(_background, cv::Point(x, y), 1, cv::Scalar(brightness, brightness, brightness), -1);
+    }
+    
     _comm.init_com(port);
 
     cv::namedWindow("Asteroids");
@@ -199,7 +211,8 @@ void CAsteroidGame::update()
 bool CAsteroidGame::draw() 
 {
     cvui::context("Asteroids");
-    _canvas = Mat::zeros(_canvas.size(), CV_8UC3);
+    //_canvas = Mat::zeros(_canvas.size(), CV_8UC3);
+    _background.copyTo(_canvas);
 
     if (_ship.get_lives() > 0) _ship.draw(_canvas);
     for (auto& a : _asteroid_list) a.draw(_canvas);

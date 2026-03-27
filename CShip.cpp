@@ -10,7 +10,6 @@ CShip::CShip()
     _velocity = cv::Point2f(0, 0);
     _angle = 0.0f;
 }
-
 void CShip::draw(cv::Mat& im)
 {
     // triangle size
@@ -34,9 +33,10 @@ void CShip::draw(cv::Mat& im)
         cv::Point(static_cast<int>(right.x),static_cast<int>(right.y))
     };
 
-    // filled triangle
-    cv::fillConvexPoly(im, pts.data(), static_cast<int>(pts.size()), cv::Scalar(0, 255, 0));
+    // --- UPDATED: Filled triangle in Silver Starship Gray (BGR: 192, 192, 192) ---
+    cv::fillConvexPoly(im, pts.data(), static_cast<int>(pts.size()), cv::Scalar(192, 192, 192));
 
     // outline using the vector overload to avoid overload resolution errors
+    // (Kept black for sharp contrast against the starfield)
     cv::polylines(im, pts, true, cv::Scalar(0, 0, 0), 2);
 }

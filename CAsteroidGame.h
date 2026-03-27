@@ -15,6 +15,7 @@
  */
 class CAsteroidGame : public CBase4618 {
 private:
+    cv::Mat _background;
     /// Player ship instance. */
     CShip _ship;
 

@@ -27,7 +27,10 @@ CAsteroid::CAsteroid(cv::Size board_size) {
 
     _lives = 1;
 }
-
 void CAsteroid::draw(cv::Mat& im) {
-    cv::circle(im, _position, _radius, cv::Scalar(180, 180, 180), -1); // gray apparently
+    // --- UPDATED: Stony brown/gray fill (BGR: 75, 100, 130) ---
+    cv::circle(im, _position, _radius, cv::Scalar(75, 100, 130), -1);
+
+    // --- NEW: Darker brown/gray outline for better visual definition ---
+    cv::circle(im, _position, _radius, cv::Scalar(40, 60, 80), 2);
 }
