@@ -26,8 +26,23 @@
     <ClCompile Include="CPong.cpp">
       <Filter>Lab 5</Filter>
     </ClCompile>
-    <ClCompile Include="CAsteroids.cpp">
+    <ClCompile Include="CAsteroidGame.cpp">
       <Filter>Lab 6</Filter>
+    </ClCompile>
+    <ClCompile Include="CMissile.cpp">
+      <Filter>Lab 6</Filter>
+    </ClCompile>
+    <ClCompile Include="CGameObject.cpp">
+      <Filter>Lab 6</Filter>
+    </ClCompile>
+    <ClCompile Include="CShip.cpp">
+      <Filter>Lab 6</Filter>
+    </ClCompile>
+    <ClCompile Include="CAsteroid.cpp">
+      <Filter>Lab 6</Filter>
+    </ClCompile>
+    <ClCompile Include="CRecyclingSort.cpp">
+      <Filter>Lab 8</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -57,8 +72,23 @@
     <ClInclude Include="CPong.h">
       <Filter>Lab 5</Filter>
     </ClInclude>
-    <ClInclude Include="CAsteroids.h">
+    <ClInclude Include="CAsteroidGame.h">
       <Filter>Lab 6</Filter>
+    </ClInclude>
+    <ClInclude Include="CMissile.h">
+      <Filter>Lab 6</Filter>
+    </ClInclude>
+    <ClInclude Include="CGameObject.h">
+      <Filter>Lab 6</Filter>
+    </ClInclude>
+    <ClInclude Include="CShip.h">
+      <Filter>Lab 6</Filter>
+    </ClInclude>
+    <ClInclude Include="CAsteroid.h">
+      <Filter>Lab 6</Filter>
+    </ClInclude>
+    <ClInclude Include="CRecyclingSort.h">
+      <Filter>Lab 8</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -76,6 +106,9 @@
     </Filter>
     <Filter Include="Lab 6">
       <UniqueIdentifier>{d646b446-8d06-439b-a559-ae815552dd3d}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Lab 8">
+      <UniqueIdentifier>{84ecb018-1bd6-40ac-a3f6-d6f81aac6932}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
 </Project>
